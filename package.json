@@ -4,6 +4,8 @@
   "description": "This is the app for the frontend of my chatbot that I want to embed on my website and within moodle.",
   "main": "index.html",
   "scripts": {
+    "start": "echo 'Start script not needed for static site'",
+    "build": "echo 'Build not required for this project'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
