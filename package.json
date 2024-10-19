@@ -1,0 +1,19 @@
+{
+  "name": "frontend-daiol-chatbot",
+  "version": "1.0.0",
+  "description": "This is the app for the frontend of my chatbot that I want to embed on my website and within moodle.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbtessier/frontend-DAIOL-chatbot.git"
+  },
+  "author": "Ryan Tessier",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbtessier/frontend-DAIOL-chatbot/issues"
+  },
+  "homepage": "https://github.com/rbtessier/frontend-DAIOL-chatbot#readme"
+}
