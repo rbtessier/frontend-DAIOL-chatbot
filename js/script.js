@@ -10,6 +10,12 @@ function startSession() {
     .catch(error => console.error("Failed to start session:", error));
 }
 
+function scrollChatToBottom() {
+    const chatHistory = document.getElementById("chat-history");
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+
 function loadSession() {
     sessionToken = localStorage.getItem("sessionToken");
     if (!sessionToken) {
