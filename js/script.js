@@ -66,4 +66,8 @@ function addMessageToChat(sender, message, className) {
 window.onload = () => {
     loadSession();
     showInitialMessage();
+    document.getElementById("send-btn").addEventListener("click", sendMessage);
+    document.getElementById("chat-input").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") sendMessage();
+    });
 };
