@@ -1,7 +1,26 @@
-document.getElementById("send-btn").addEventListener("click", sendMessage);
-document.getElementById("chat-input").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") sendMessage();
-});
+let sessionToken = null;
+
+function startSession() {
+    fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/start")
+    .then(response => response.json())
+    .then(data => {
+        sessionToken = data.token;
+        localStorage.setItem("sessionToken", sessionToken);
+    })
+    .catch(error => console.error("Failed to start session:", error));
+}
+
+function loadSession() {
+    sessionToken = localStorage.getItem("sessionToken");
+    if (!sessionToken) {
+        startSession();
+    }
+}
+
+function showInitialMessage() {
+    const initialMessage = "Hi, I'm your data, AI, and strategic leadership chatbot. How can I help you?";
+    addMessageToChat("Bot", initialMessage, "bot-message");
+}
 
 function sendMessage() {
     const message = document.getElementById("chat-input").value.trim();
@@ -12,6 +31,7 @@ function sendMessage() {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": sessionToken,
         },
         body: JSON.stringify({ message }),
     })
@@ -37,12 +57,13 @@ function addMessageToChat(sender, message, className) {
     const chatHistory = document.getElementById("chat-history");
     const messageElement = document.createElement("div");
     messageElement.classList.add("chat-message", className);
-    messageElement.textContent = `${sender}: ${message}`;
+    const formattedMessage = marked.parse(message);
+    messageElement.innerHTML = `${sender}: ${formattedMessage}`;
     chatHistory.appendChild(messageElement);
     scrollChatToBottom();
 }
 
-function scrollChatToBottom() {
-    const chatHistory = document.getElementById("chat-history");
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-}
+window.onload = () => {
+    loadSession();
+    showInitialMessage();
+};
