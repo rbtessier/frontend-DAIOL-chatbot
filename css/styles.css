@@ -63,7 +63,7 @@ body, html {
 }
 
 .user-message {
-    background-color: #007bff;
+    background-color: #4a6fa5;
     color: #ffffff;
     align-self: flex-end;
     text-align: right;
@@ -80,12 +80,29 @@ body, html {
     color: #000000;
     align-self: flex-start;
     text-align: left;
-    padding: 8px 15px;  /* Reduce padding on the bottom */
-    margin-bottom: 5px;  /* Slightly adjust bottom margin for spacing */
+    padding: 8px 15px;
+    margin-bottom: 5px;
     border-radius: 20px;
     max-width: 75%;
     display: inline-block;
     word-wrap: break-word;
+    position: relative;  /* Allow icon placement */
+    margin-left: 40px;  /* Space for the icon */
+}
+
+/* Container for bot messages to include icon */
+.bot-message-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+/* Styling for the bot icon */
+.bot-icon {
+    width: 30px;  /* Adjust size as needed */
+    height: 30px;
+    margin-right: 10px;  /* Space between icon and bubble */
+    border-radius: 50%;  /* Round icon */
 }
 
 .chat-input-container {
@@ -103,7 +120,7 @@ body, html {
 }
 
 #send-btn, #upload-btn {
-    background-color: #007bff;
+    background-color: #4a6fa5;
     color: #ffffff;
     border: none;
     padding: 15px 20px;
@@ -112,5 +129,5 @@ body, html {
 }
 
 #send-btn:hover, #upload-btn:hover {
-    background-color: #0056b3;
+    background-color: #0d1b2a;
 }
