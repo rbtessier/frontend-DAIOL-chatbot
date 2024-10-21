@@ -12,14 +12,61 @@ body, html {
 .chat-container {
     width: 100%;
     max-width: 600px;
-    background-color: #ffffff; /* Chat container background white */
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     height: 80vh;
+    padding: 10px;  /* Add padding to avoid the edges */
 }
+
+.chat-input-container {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 10px;  /* Adjust padding */
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#send-btn, #upload-btn {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;  /* Adjust button padding for consistency */
+    cursor: pointer;
+    margin-left: 5px;
+    border-radius: 5px;
+}
+
+#send-btn:hover, #upload-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Improve responsiveness */
+@media (max-width: 600px) {
+    .chat-container {
+        width: 90%;  /* Use most of the screen */
+        height: 90vh;  /* Adjust height */
+    }
+
+    #chat-input {
+        font-size: 14px;  /* Adjust font size */
+    }
+
+    #send-btn, #upload-btn {
+        padding: 8px 12px;  /* Adjust button padding for smaller screens */
+    }
+}
+
 
 /* Removed chat-header CSS */
 
@@ -41,13 +88,15 @@ body, html {
 .user-message {
     background-color: #007bff;
     color: #ffffff;
-    align-self: flex-end;
+    align-self: flex-end;  /* Move to the right */
+    text-align: right;
 }
 
 .bot-message {
     background-color: #f1f0f0;
     color: #000000;
-    align-self: flex-start;
+    align-self: flex-start;  /* Stay on the left */
+    text-align: left;
 }
 
 .chat-input-container {

@@ -63,14 +63,40 @@ function addMessageToChat(sender, message, className) {
     const chatHistory = document.getElementById("chat-history");
     const messageElement = document.createElement("div");
     messageElement.classList.add("chat-message", className);
+
     const formattedMessage = marked.parse(message);
     messageElement.innerHTML = `${sender}: ${formattedMessage}`;
     chatHistory.appendChild(messageElement);
     scrollChatToBottom();
+
+    // Save message to local storage
+    saveChatHistory(sender, message, className);
 }
+
+function saveChatHistory(sender, message, className) {
+    const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    chatData.push({ sender, message, className });
+    localStorage.setItem("chatHistory", JSON.stringify(chatData));
+}
+
+function loadChatHistory() {
+    const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    chatData.forEach(chat => {
+        const { sender, message, className } = chat;
+        const chatHistory = document.getElementById("chat-history");
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", className);
+        const formattedMessage = marked.parse(message);
+        messageElement.innerHTML = `${sender}: ${formattedMessage}`;
+        chatHistory.appendChild(messageElement);
+    });
+    scrollChatToBottom();
+}
+
 
 window.onload = () => {
     loadSession();
+    loadChatHistory();
     showInitialMessage();
     document.getElementById("send-btn").addEventListener("click", sendMessage);
     document.getElementById("chat-input").addEventListener("keydown", function (e) {
