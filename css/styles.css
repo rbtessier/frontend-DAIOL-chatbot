@@ -38,7 +38,7 @@ body, html {
         padding: 8px 12px;  /* Adjust button padding */
         font-size: 14px;  /* Smaller font size for buttons */
     }
-    
+
     .user-message, .bot-message {
         max-width: 90%;  /* Allow more width on smaller screens */
     }
@@ -76,8 +76,8 @@ body, html {
     color: #ffffff;
     align-self: flex-end;
     text-align: right;
-    padding: 6px 10px;  /* Reduce padding on the bottom */
-    margin-bottom: 5px;  /* Slightly adjust bottom margin for spacing */
+    padding: 6px 8px;  /* Reduce padding on the bottom */
+    margin-bottom: 3px;  /* Slightly adjust bottom margin for spacing */
     border-radius: 20px;
     max-width: 75%;
     display: inline-block;
@@ -89,8 +89,8 @@ body, html {
     color: #000000;
     align-self: flex-start;
     text-align: left;
-    padding: 6px 10px;
-    margin-bottom: 5px;
+    padding: 6px 8px;
+    margin-bottom: 3px;
     border-radius: 20px;
     max-width: 75%;
     display: inline-block;
@@ -103,14 +103,14 @@ body, html {
 .bot-message-container {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 /* Styling for the bot icon */
 .bot-icon {
     width: 50px;  /* Increase width */
     height: 50px;  /* Increase height */
-    margin-right: 10px;
+    margin-right: 5px;
     border-radius: 50%;  /* Keep it circular */
 }
 
