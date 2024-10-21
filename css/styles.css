@@ -25,8 +25,7 @@ body, html {
 @media (max-width: 600px) {
     .chat-container {
         width: 100%;  /* Use most of the screen width */
-        height: 85vh;  /* Slightly adjust height */
-        padding: 5px;
+        height: 100%;  /* Slightly adjust height */
     }
 
     #chat-input {
