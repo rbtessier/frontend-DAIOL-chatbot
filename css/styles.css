@@ -43,13 +43,16 @@ body, html {
 
 
 /* Removed chat-header CSS */
-
 .chat-history {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
     background-color: #eaeaea;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;  /* Add spacing between messages */
 }
+
 
 .chat-message {
     padding: 10px 15px;
@@ -62,15 +65,27 @@ body, html {
 .user-message {
     background-color: #007bff;
     color: #ffffff;
-    align-self: flex-end;  /* Move to the right */
+    align-self: flex-end;  /* Align to the right */
     text-align: right;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    max-width: 75%;  /* Limit max width to avoid stretching across */
+    display: inline-block;  /* Allow natural resizing */
+    word-wrap: break-word;  /* Ensure long words wrap correctly */
 }
 
 .bot-message {
     background-color: #f1f0f0;
     color: #000000;
-    align-self: flex-start;  /* Stay on the left */
+    align-self: flex-start;  /* Align to the left */
     text-align: left;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    max-width: 75%;  /* Limit max width to avoid stretching across */
+    display: inline-block;  /* Allow natural resizing */
+    word-wrap: break-word;  /* Ensure long words wrap correctly */
 }
 
 .chat-input-container {
