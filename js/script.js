@@ -67,17 +67,42 @@ function sendMessage() {
 
 function addMessageToChat(sender, message, className) {
     const chatHistory = document.getElementById("chat-history");
-    const messageElement = document.createElement("div");
-    messageElement.classList.add("chat-message", className);
-
-    const formattedMessage = marked.parse(message);
-    messageElement.innerHTML = `${sender}: ${formattedMessage}`;
-    chatHistory.appendChild(messageElement);
+    const messageContainer = document.createElement("div");
+    
+    if (className === "bot-message") {
+        // Create a container to hold the icon and message
+        messageContainer.classList.add("bot-message-container");
+        
+        // Create the bot icon
+        const iconElement = document.createElement("img");
+        iconElement.src = "images/bot-icon.png";  // Path to the bot icon
+        iconElement.classList.add("bot-icon");
+        
+        // Create the message element
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", className);
+        const formattedMessage = marked.parse(message);
+        messageElement.innerHTML = formattedMessage;
+        
+        // Append the icon and message to the container
+        messageContainer.appendChild(iconElement);
+        messageContainer.appendChild(messageElement);
+        
+    } else {
+        // Standard message for user without icon
+        messageContainer.classList.add("chat-message", className);
+        const formattedMessage = marked.parse(message);
+        messageContainer.innerHTML = formattedMessage;
+    }
+    
+    chatHistory.appendChild(messageContainer);
     scrollChatToBottom();
 
     // Save message to local storage
     saveChatHistory(sender, message, className);
 }
+
+
 
 function saveChatHistory(sender, message, className) {
     const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
