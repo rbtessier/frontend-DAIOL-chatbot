@@ -24,7 +24,7 @@ body, html {
 
 @media (max-width: 600px) {
     .chat-container {
-        width: 90%;  /* Use most of the screen width */
+        width: 100%;  /* Use most of the screen width */
         height: 85vh;  /* Slightly adjust height */
         padding: 5px;
     }
@@ -35,7 +35,7 @@ body, html {
     }
 
     #send-btn, #upload-btn {
-        padding: 8px 12px;  /* Adjust button padding */
+        padding: 8px 10px;  /* Adjust button padding */
         font-size: 14px;  /* Smaller font size for buttons */
     }
 
@@ -44,8 +44,8 @@ body, html {
     }
 
     .bot-icon {
-        width: 35px;  /* Slightly smaller icon on mobile */
-        height: 35px;
+        width: 25px;  /* Slightly smaller icon on mobile */
+        height: 25px;
     }
 }
 
