@@ -19,53 +19,27 @@ body, html {
     display: flex;
     flex-direction: column;
     height: 80vh;
-    padding: 10px;  /* Add padding to avoid the edges */
+    transition: all 0.3s ease;  /* Smooth transition */
 }
 
-.chat-input-container {
-    display: flex;
-    border-top: 1px solid #ccc;
-    padding: 10px;
-}
-
-#chat-input {
-    flex: 1;
-    padding: 10px;  /* Adjust padding */
-    border: none;
-    outline: none;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-#send-btn, #upload-btn {
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    padding: 10px 15px;  /* Adjust button padding for consistency */
-    cursor: pointer;
-    margin-left: 5px;
-    border-radius: 5px;
-}
-
-#send-btn:hover, #upload-btn:hover {
-    background-color: #0056b3;
-}
-
-/* Improve responsiveness */
 @media (max-width: 600px) {
     .chat-container {
-        width: 90%;  /* Use most of the screen */
-        height: 90vh;  /* Adjust height */
+        width: 90%;  /* Use most of the screen width */
+        height: 85vh;  /* Slightly adjust height */
+        padding: 5px;
     }
 
     #chat-input {
-        font-size: 14px;  /* Adjust font size */
+        font-size: 14px;
+        padding: 8px;  /* Adjust padding for better fit */
     }
 
     #send-btn, #upload-btn {
-        padding: 8px 12px;  /* Adjust button padding for smaller screens */
+        padding: 8px 12px;  /* Adjust button padding */
+        font-size: 14px;  /* Smaller font size for buttons */
     }
 }
+
 
 
 /* Removed chat-header CSS */

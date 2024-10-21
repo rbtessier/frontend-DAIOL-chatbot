@@ -24,8 +24,14 @@ function loadSession() {
 }
 
 function showInitialMessage() {
-    const initialMessage = "Hi, I'm your data, AI, and strategic leadership chatbot. How can I help you?";
-    addMessageToChat("Bot", initialMessage, "bot-message");
+    // Check if the intro message has already been shown
+    const introShown = localStorage.getItem("introShown");
+
+    if (!introShown) {
+        const initialMessage = "Hi, I'm your data, AI, and strategic leadership chatbot. How can I help you?";
+        addMessageToChat("Bot", initialMessage, "bot-message");
+        localStorage.setItem("introShown", true);  // Set the flag to prevent future repeats
+    }
 }
 
 function sendMessage() {
