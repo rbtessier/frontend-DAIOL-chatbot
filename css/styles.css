@@ -71,7 +71,7 @@ body, html {
 }
 
 .user-message {
-    background-color: #4a6fa5;
+    background-color: #ba3373;
     color: #ffffff;
     align-self: flex-end;
     text-align: right;
@@ -110,6 +110,7 @@ body, html {
     width: 50px;  /* Increase width */
     height: 50px;  /* Increase height */
     border-radius: 50%;  /* Keep it circular */
+    border: 2px solid #ffffff;
 }
 
 .chat-input-container {
