@@ -2,28 +2,25 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #fdfdfd;  /* White background */
+    background-color: #ffffff; /* Background white */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-
 .chat-container {
     width: 100%;
     max-width: 600px;
-    background-color: #d8c9a3;  /* Beige background for a soft tone */
+    background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     height: 80vh;
-    padding: 10px;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease;  /* Smooth transition */
 }
-
 
 @media (max-width: 600px) {
     .chat-container {
@@ -66,50 +63,30 @@ body, html {
 }
 
 .user-message {
-    background-color: #4a6fa5;  /* Blue for user messages */
-    color: #fdfdfd;  /* White text */
+    background-color: #007bff;
+    color: #ffffff;
     align-self: flex-end;
     text-align: right;
-    padding: 8px 15px;
-    margin-bottom: 5px;
+    padding: 8px 15px;  /* Reduce padding on the bottom */
+    margin-bottom: 5px;  /* Slightly adjust bottom margin for spacing */
     border-radius: 20px;
     max-width: 75%;
     display: inline-block;
     word-wrap: break-word;
 }
-
 
 .bot-message {
-    background-color: #d8c9a3;  /* Beige for bot messages */
-    color: #0d1b2a;  /* Dark navy text */
+    background-color: #f1f0f0;
+    color: #000000;
     align-self: flex-start;
     text-align: left;
-    padding: 8px 15px;
-    margin-bottom: 5px;
+    padding: 8px 15px;  /* Reduce padding on the bottom */
+    margin-bottom: 5px;  /* Slightly adjust bottom margin for spacing */
     border-radius: 20px;
     max-width: 75%;
     display: inline-block;
     word-wrap: break-word;
-    position: relative;  /* Allow icon placement */
-    margin-left: 40px;  /* Space for the icon */
 }
-
-/* Container for bot messages to include icon */
-.bot-message-container {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 10px;
-}
-
-/* Styling for the bot icon */
-.bot-icon {
-    width: 30px;  /* Adjust size as needed */
-    height: 30px;
-    margin-right: 10px;  /* Space between icon and bubble */
-    border-radius: 50%;  /* Round icon */
-}
-
-
 
 .chat-input-container {
     display: flex;
@@ -126,18 +103,14 @@ body, html {
 }
 
 #send-btn, #upload-btn {
-    background-color: #ff8800;  /* Orange for buttons */
-    color: #fdfdfd;  /* White text */
+    background-color: #007bff;
+    color: #ffffff;
     border: none;
-    padding: 10px 15px;
+    padding: 15px 20px;
     cursor: pointer;
     margin-left: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #send-btn:hover, #upload-btn:hover {
-    background-color: #d7263d;  /* Red for hover effect */
-    transform: scale(1.05);  /* Slightly bigger on hover */
+    background-color: #0056b3;
 }
