@@ -34,6 +34,39 @@ function showInitialMessage() {
     }
 }
 
+
+// Helper function to create message elements (user or bot)
+function createMessageElement(message, className) {
+    const messageContainer = document.createElement("div");
+
+    if (className === "bot-message") {
+        // Create a container to hold the icon and message
+        messageContainer.classList.add("bot-message-container");
+
+        // Create the bot icon
+        const iconElement = document.createElement("img");
+        iconElement.src = "images/bot-icon.png";  // Path to the bot icon
+        iconElement.classList.add("bot-icon");
+
+        // Create the message element
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", className);
+        const formattedMessage = marked.parse(message);
+        messageElement.innerHTML = formattedMessage;
+
+        // Append the icon and message to the container
+        messageContainer.appendChild(iconElement);
+        messageContainer.appendChild(messageElement);
+    } else {
+        // Create a standard user message
+        messageContainer.classList.add("chat-message", className);
+        const formattedMessage = marked.parse(message);
+        messageContainer.innerHTML = formattedMessage;
+    }
+
+    return messageContainer;
+}
+
 function sendMessage() {
     const message = document.getElementById("chat-input").value.trim();
     if (message === "") return;
@@ -64,66 +97,36 @@ function sendMessage() {
     document.getElementById("chat-input").value = "";
     scrollChatToBottom();
 }
-
+// Function to add a message to the chat, whether user or bot
 function addMessageToChat(sender, message, className) {
     const chatHistory = document.getElementById("chat-history");
-    const messageContainer = document.createElement("div");
-    
-    if (className === "bot-message") {
-        // Create a container to hold the icon and message
-        messageContainer.classList.add("bot-message-container");
-        
-        // Create the bot icon
-        const iconElement = document.createElement("img");
-        iconElement.src = "images/bot-icon.png";  // Path to the bot icon
-        iconElement.classList.add("bot-icon");
-        
-        // Create the message element
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("chat-message", className);
-        const formattedMessage = marked.parse(message);
-        messageElement.innerHTML = formattedMessage;
-        
-        // Append the icon and message to the container
-        messageContainer.appendChild(iconElement);
-        messageContainer.appendChild(messageElement);
-        
-    } else {
-        // Standard message for user without icon
-        messageContainer.classList.add("chat-message", className);
-        const formattedMessage = marked.parse(message);
-        messageContainer.innerHTML = formattedMessage;
-    }
-    
+    const messageContainer = createMessageElement(message, className);
     chatHistory.appendChild(messageContainer);
     scrollChatToBottom();
 
     // Save message to local storage
-    saveChatHistory(sender, message, className);
+    saveChatHistory(message, className);
 }
 
 
-
-function saveChatHistory(sender, message, className) {
+// Save the message history without "Bot" or "You" labels
+function saveChatHistory(message, className) {
     const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
-    chatData.push({ sender, message, className });
+    chatData.push({ message, className });
     localStorage.setItem("chatHistory", JSON.stringify(chatData));
 }
 
+// Load the chat history from local storage
 function loadChatHistory() {
     const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
     chatData.forEach(chat => {
-        const { sender, message, className } = chat;
+        const { message, className } = chat;
         const chatHistory = document.getElementById("chat-history");
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("chat-message", className);
-        const formattedMessage = marked.parse(message);
-        messageElement.innerHTML = `${sender}: ${formattedMessage}`;
-        chatHistory.appendChild(messageElement);
+        const messageContainer = createMessageElement(message, className);
+        chatHistory.appendChild(messageContainer);
     });
     scrollChatToBottom();
 }
-
 
 window.onload = () => {
     loadSession();

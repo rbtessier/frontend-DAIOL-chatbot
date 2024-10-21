@@ -38,6 +38,15 @@ body, html {
         padding: 8px 12px;  /* Adjust button padding */
         font-size: 14px;  /* Smaller font size for buttons */
     }
+    
+    .user-message, .bot-message {
+        max-width: 90%;  /* Allow more width on smaller screens */
+    }
+
+    .bot-icon {
+        width: 35px;  /* Slightly smaller icon on mobile */
+        height: 35px;
+    }
 }
 
 
@@ -67,7 +76,7 @@ body, html {
     color: #ffffff;
     align-self: flex-end;
     text-align: right;
-    padding: 8px 15px;  /* Reduce padding on the bottom */
+    padding: 6px 10px;  /* Reduce padding on the bottom */
     margin-bottom: 5px;  /* Slightly adjust bottom margin for spacing */
     border-radius: 20px;
     max-width: 75%;
@@ -80,7 +89,7 @@ body, html {
     color: #000000;
     align-self: flex-start;
     text-align: left;
-    padding: 8px 15px;
+    padding: 6px 10px;
     margin-bottom: 5px;
     border-radius: 20px;
     max-width: 75%;
@@ -99,10 +108,10 @@ body, html {
 
 /* Styling for the bot icon */
 .bot-icon {
-    width: 30px;  /* Adjust size as needed */
-    height: 30px;
-    margin-right: 10px;  /* Space between icon and bubble */
-    border-radius: 50%;  /* Round icon */
+    width: 50px;  /* Increase width */
+    height: 50px;  /* Increase height */
+    margin-right: 10px;
+    border-radius: 50%;  /* Keep it circular */
 }
 
 .chat-input-container {
