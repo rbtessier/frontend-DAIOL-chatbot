@@ -63,7 +63,7 @@ body, html {
 
 
 .chat-message {
-    padding: 10px 10px;
+    padding: 5px 10px;
     margin-bottom: 5px;
     border-radius: 20px;
     max-width: 75%;
@@ -75,7 +75,7 @@ body, html {
     color: #ffffff;
     align-self: flex-end;
     text-align: right;
-    padding: 8px 8px;  /* Reduce padding on the bottom */
+    padding: 5px 8px;  /* Reduce padding on the bottom */
     margin-bottom: 3px;  /* Slightly adjust bottom margin for spacing */
     border-radius: 20px;
     max-width: 75%;
@@ -88,7 +88,7 @@ body, html {
     color: #000000;
     align-self: flex-start;
     text-align: left;
-    padding: 8px 8px;
+    padding: 5px 8px;
     margin-bottom: 3px;
     border-radius: 20px;
     max-width: 75%;
@@ -127,7 +127,7 @@ body, html {
 }
 
 #send-btn, #upload-btn {
-    background-color: #4a6fa5;
+    background-color: #710039;
     color: #ffffff;
     border: none;
     padding: 15px 20px;
@@ -136,5 +136,5 @@ body, html {
 }
 
 #send-btn:hover, #upload-btn:hover {
-    background-color: #0d1b2a;
+    background-color: #4a0125;
 }
