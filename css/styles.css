@@ -18,7 +18,8 @@ body, html {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 80vh;
+    height: calc(80vh - 50px); /* Adjust height to fit below the top bar */
+    margin-top: 60px; /* Space for the top bar */
     transition: all 0.3s ease;  /* Smooth transition */
 }
 

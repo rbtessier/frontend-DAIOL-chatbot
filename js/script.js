@@ -5,7 +5,8 @@ function startSession() {
     .then(response => response.json())
     .then(data => {
         sessionToken = data.token;
-        localStorage.setItem("sessionToken", sessionToken);
+        // Store session token in sessionStorage for this browser session
+        sessionStorage.setItem("sessionToken", sessionToken);
     })
     .catch(error => console.error("Failed to start session:", error));
 }
@@ -17,8 +18,10 @@ function scrollChatToBottom() {
 
 
 function loadSession() {
-    sessionToken = localStorage.getItem("sessionToken");
+    // Check sessionStorage to determine if there's already a session for this page session
+    sessionToken = sessionStorage.getItem("sessionToken");
     if (!sessionToken) {
+        // No session exists, meaning it's a new browser session, so we start a new one
         startSession();
     }
 }
@@ -108,6 +111,11 @@ function addMessageToChat(sender, message, className) {
     saveChatHistory(message, className);
 }
 
+function clearChat() {
+    localStorage.removeItem("chatHistory");
+    document.getElementById("chat-history").innerHTML = "";
+    startSession();
+}
 
 // Save the message history without "Bot" or "You" labels
 function saveChatHistory(message, className) {
@@ -136,4 +144,5 @@ window.onload = () => {
     document.getElementById("chat-input").addEventListener("keydown", function (e) {
         if (e.key === "Enter") sendMessage();
     });
+    document.getElementById("new-chat-btn").addEventListener("click", clearChat);
 };
