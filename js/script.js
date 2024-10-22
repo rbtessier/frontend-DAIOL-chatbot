@@ -144,5 +144,5 @@ window.onload = () => {
     document.getElementById("chat-input").addEventListener("keydown", function (e) {
         if (e.key === "Enter") sendMessage();
     });
-    document.getElementById("new-chat-btn").addEventListener("click", clearChat);
+    //document.getElementById("new-chat-btn").addEventListener("click", clearChat);
 };
