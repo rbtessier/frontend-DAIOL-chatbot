@@ -26,6 +26,7 @@ function loadSession() {
     }
 }
 
+/* Old function replace
 function showInitialMessage() {
     // Check if the intro message has already been shown
     const introShown = localStorage.getItem("introShown");
@@ -34,6 +35,17 @@ function showInitialMessage() {
         const initialMessage = "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
         addMessageToChat("Bot", initialMessage, "bot-message");
         localStorage.setItem("introShown", true);  // Set the flag to prevent future repeats
+    }
+}
+
+*/
+
+function showInitialMessage() {
+    // Show the initial message only if there is no existing chat history
+    const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    if (chatData.length === 0) {
+        const initialMessage = "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
+        addMessageToChat("Bot", initialMessage, "bot-message");
     }
 }
 
