@@ -138,6 +138,12 @@ function loadChatHistory() {
 
 window.onload = () => {
     loadSession();
+
+    // Check if a new session started. If so, clear chat history
+    if (!sessionStorage.getItem("sessionToken")) {
+        localStorage.removeItem("chatHistory");
+    }
+
     loadChatHistory();
     showInitialMessage();
     document.getElementById("send-btn").addEventListener("click", sendMessage);
