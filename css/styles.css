@@ -68,6 +68,10 @@ body, html {
     z-index: 15; /* Keep it above sidebar for easy access */
 }
 
+.open-sidebar-btn:hover {
+    background-color: rgba(74, 1, 37, 0.1); /* Light hover background */
+    border-radius: 5px;
+}
 
 .hamburger-icon {
     width: 24px;

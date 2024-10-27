@@ -173,6 +173,8 @@ window.onload = () => {
 
     loadChatHistory();
     showInitialMessage();
+
+    // Add event listeners for chat interactions
     document.getElementById("send-btn").addEventListener("click", sendMessage);
     document.getElementById("chat-input").addEventListener("keydown", function (e) {
         if (e.key === "Enter") sendMessage();
