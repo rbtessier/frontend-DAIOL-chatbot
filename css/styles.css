@@ -10,7 +10,7 @@ body, html {
 }
 
 .chat-container {
-    position: relative;  /* Ensure sidebar is positioned relative to this */
+    position: relative;
     width: 100%;
     max-width: 600px;
     background-color: #ffffff;
@@ -24,12 +24,13 @@ body, html {
     transition: all 0.3s ease;
 }
 
+/* Sidebar styling */
 .sidebar {
     height: 100%;
     width: 0;
-    position: absolute;  /* Position inside the chat container */
-    right: 0;
+    position: absolute;
     top: 0;
+    right: 0;
     background-color: #710039;
     overflow-x: hidden;
     transition: width 0.3s;
@@ -38,7 +39,7 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 10;  /* Ensure it appears above other elements in chat container */
+    z-index: 10; /* Ensure it appears above other elements in chat container */
 }
 
 .sidebar button {
@@ -55,16 +56,18 @@ body, html {
     color: #ffffff;
 }
 
+/* Sidebar toggle button */
 .open-sidebar-btn {
-    position: fixed;
+    position: absolute;
     top: 10px;
     right: 10px;
     background-color: transparent;
     border: none;
     cursor: pointer;
     padding: 10px;
-    border-radius: 5px;
+    z-index: 15; /* Keep it above sidebar for easy access */
 }
+
 
 .hamburger-icon {
     width: 24px;
