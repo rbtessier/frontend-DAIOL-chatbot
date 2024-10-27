@@ -181,9 +181,11 @@ window.onload = () => {
 
     // Sidebar toggle button listener
     document.getElementById("open-sidebar-btn").addEventListener("click", function () {
+        console.log("Sidebar toggle clicked");  // Temporary log for testing
         const sidebar = document.getElementById("sidebar");
         sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
     });
+    
 
     // New Chat button listener inside the sidebar
     document.getElementById("new-chat-btn").addEventListener("click", function () {
