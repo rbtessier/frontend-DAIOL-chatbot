@@ -148,6 +148,21 @@ function loadChatHistory() {
     scrollChatToBottom();
 }
 
+// Toggle the sidebar visibility
+document.getElementById("open-sidebar-btn").addEventListener("click", function () {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
+});
+
+// New Chat button functionality
+document.getElementById("new-chat-btn").addEventListener("click", function () {
+    clearChat();
+    showInitialMessage();  // Show the introductory message again
+    document.getElementById("sidebar").style.width = "0";  // Close the sidebar
+});
+
+
+
 window.onload = () => {
     loadSession();
 
@@ -163,4 +178,17 @@ window.onload = () => {
         if (e.key === "Enter") sendMessage();
     });
     //document.getElementById("new-chat-btn").addEventListener("click", clearChat);
+
+    // Sidebar toggle button listener
+    document.getElementById("open-sidebar-btn").addEventListener("click", function () {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
+    });
+
+    // New Chat button listener inside the sidebar
+    document.getElementById("new-chat-btn").addEventListener("click", function () {
+        clearChat();
+        showInitialMessage();  // Show the introductory message again
+        document.getElementById("sidebar").style.width = "0";  // Close the sidebar
+    });
 };
