@@ -182,6 +182,7 @@ window.onload = () => {
     //document.getElementById("new-chat-btn").addEventListener("click", clearChat);
 
     // Sidebar toggle button listener
+    /*
     document.getElementById("open-sidebar-btn").addEventListener("click", function () {
         console.log("Sidebar toggle clicked");  // Temporary log for testing
         const sidebar = document.getElementById("sidebar");
@@ -195,4 +196,5 @@ window.onload = () => {
         showInitialMessage();  // Show the introductory message again
         document.getElementById("sidebar").style.width = "0";  // Close the sidebar
     });
+    */
 };
