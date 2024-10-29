@@ -148,6 +148,7 @@ function loadChatHistory() {
     scrollChatToBottom();
 }
 
+/*
 // Toggle the sidebar visibility
 document.getElementById("open-sidebar-btn").addEventListener("click", function () {
     const sidebar = document.getElementById("sidebar");
@@ -160,7 +161,7 @@ document.getElementById("new-chat-btn").addEventListener("click", function () {
     showInitialMessage();  // Show the introductory message again
     document.getElementById("sidebar").style.width = "0";  // Close the sidebar
 });
-
+*/
 
 
 window.onload = () => {
