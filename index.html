@@ -1,47 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data, AI, and Leadership Chatbot</title>
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="js/script.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data, AI, and Leadership Chatbot</title>
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Markdown renderer + sanitizer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
+  <!-- Minimal inline CSS to ensure left blade works even without edits to your CSS -->
+  <style>
+    .chat-top-bar {
+      display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+    }
+    .chat-top-bar h2 { margin: 0; flex: 1 1 auto; text-align: center; }
+    .open-sidebar-btn { background: transparent; border: 0; cursor: pointer; padding: 4px; }
+    .hamburger-icon { width: 24px; height: 24px; }
+
+    /* Left blade */
+    .sidebar {
+      position: fixed; top: 0; left: 0; height: 100%; width: 0;
+      overflow: hidden; background: #111; color: #fff; transition: width .25s ease;
+      z-index: 9999; padding-top: 60px;
+    }
+    .sidebar.open { width: 250px; }
+    #new-chat-btn { display: block; margin: 12px; width: calc(100% - 24px); }
+
+    /* Basic layout (works with your existing CSS too) */
+    .chat-container { max-width: 900px; margin: 0 auto; padding: 0 12px; }
+    .chat-history { height: 60vh; overflow: auto; border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
+    .chat-input-container { display: flex; gap: 8px; margin-top: 12px; }
+    .chat-input-container input[type="text"] { flex: 1 1 auto; padding: 10px; }
+    .chat-message { margin: 8px 0; }
+    .bot-message-container { display:flex; gap:10px; align-items:flex-start; }
+    .bot-icon { width: 28px; height: 28px; border-radius: 50%; }
+  </style>
 </head>
+
 <body>
-    
-    <div class="chat-container">
+  <div class="chat-container">
 
-        <div class="chat-top-bar">
-            <h2>McAllister</h2>
-            <button id="open-sidebar-btn" class="open-sidebar-btn">
-                <img src="images/hamburger.svg" alt="Open Sidebar" class="hamburger-icon" />
-            </button>
-        </div>
-
-        <!--<div class="chat-header"><h2>Strategic Leadership Chatbot</h2></div>-->
-        <div class="chat-history" id="chat-history"></div>
-        <div class="chat-input-container">
-            <input type="text" id="chat-input" placeholder="Type your message..." />
-            <!--<input type="file" id="file-input" accept=".pdf,.docx,.txt" />-->
-            <!--<button id="upload-btn">Upload</button>-->
-            <button id="send-btn">Send</button>
-        </div>
-
-        <!-- Sidebar for New Chat -->
-        <div id="sidebar" class="sidebar">
-            <button id="new-chat-btn">New Chat</button>
-        </div>
-        
-        
-        
-
+    <div class="chat-top-bar">
+      <!-- Moved to the left -->
+      <button id="open-sidebar-btn" class="open-sidebar-btn" aria-label="Open menu">
+        <img src="images/hamburger.svg" alt="" class="hamburger-icon" />
+      </button>
+      <h2>McAllister</h2>
     </div>
 
-    
+    <div class="chat-history" id="chat-history"></div>
+
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" placeholder="Type your message..." />
+      <button id="send-btn">Send</button>
+    </div>
+
+    <!-- Left blade -->
+    <div id="sidebar" class="sidebar">
+      <button id="new-chat-btn">New Chat</button>
+    </div>
+  </div>
+
+  <script src="js/script.js" defer></script>
 </body>
 </html>
-
-
-    
