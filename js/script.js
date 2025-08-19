@@ -119,6 +119,11 @@ function createMessageElement(message, className) {
     return messageContainer;
 }
 
+function scrollChatToBottom() {
+  const el = document.getElementById("chat-history");
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
 // before: function sendMessage() { ... }
 async function sendMessage() {
   const input = document.getElementById("chat-input");
@@ -128,8 +133,9 @@ async function sendMessage() {
   if (!sessionToken) {
     await loadSession();
     if (!sessionToken) {
-      console.error("No session token; cannot send.");
-      return;
+    console.error("No session token; cannot send.");
+    addMessageToChat("Bot", "Couldn’t start a session. Please reload.", "bot-message");
+    return;
     }
   }
 
@@ -221,20 +227,13 @@ document.getElementById("new-chat-btn").addEventListener("click", function () {
 // before: window.onload = () => { ... }
 window.onload = async () => {
   const newSession = await loadSession();
+  if (newSession) localStorage.removeItem("chatHistory");
 
-  if (newSession) {
-    // only clear if we truly created a brand‑new token
-    localStorage.removeItem("chatHistory");
-  }
+  try { loadChatHistory(); } catch (e) { console.error("loadChatHistory failed:", e); }
+  showInitialMessage();
 
-  loadChatHistory();
-  showInitialMessage(); // now initialMessage is guaranteed (or falls back)
-
-  // listeners
   document.getElementById("send-btn").addEventListener("click", sendMessage);
-  document.getElementById("chat-input").addEventListener("keydown", e => {
-    if (e.key === "Enter") sendMessage();
-  });
+  document.getElementById("chat-input").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
 
   document.getElementById("open-sidebar-btn").addEventListener("click", () => {
     const sidebar = document.getElementById("sidebar");
@@ -247,5 +246,6 @@ window.onload = async () => {
     document.getElementById("sidebar").style.width = "0";
   });
 };
+
 
 
