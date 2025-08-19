@@ -286,7 +286,7 @@ window.onload = async () => {
 
   document.getElementById("send-btn").addEventListener("click", sendMessage);
   document.getElementById("chat-input").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
-
+/*
   document.getElementById("open-sidebar-btn").addEventListener("click", () => {
     const sidebar = document.getElementById("sidebar");
     sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
@@ -297,6 +297,7 @@ window.onload = async () => {
     showInitialMessage();
     document.getElementById("sidebar").style.width = "0";
   });
+  */
 };
 
 
