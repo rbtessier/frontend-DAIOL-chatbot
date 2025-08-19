@@ -42,18 +42,20 @@ function startSession(params = {}) {
     });
 }
 
+// before: function loadSession() { ... }
 async function loadSession() {
-    sessionToken = sessionStorage.getItem("sessionToken");
-    startParams = JSON.parse(sessionStorage.getItem("startParams") || "{}");
+  sessionToken = sessionStorage.getItem("sessionToken");
+  startParams = JSON.parse(sessionStorage.getItem("startParams") || "{}");
 
-    if (!sessionToken) {
-        const paramsFromURL = getStartParamsFromURL();
-        startParams = paramsFromURL;
-        const started = await startSession(paramsFromURL);
-        return started; // true if we created a session now
-    }
-    return false; // we already had a session
+  if (!sessionToken) {
+    const paramsFromURL = getStartParamsFromURL();
+    startParams = paramsFromURL;
+    await startSession(paramsFromURL);   // <-- wait for token + initialMessage
+    return true;                         // brand‑new session
+  }
+  return false;                          // session already existed
 }
+
 
 
 /* Old function replace
@@ -114,36 +116,45 @@ function createMessageElement(message, className) {
     return messageContainer;
 }
 
-function sendMessage() {
-    const message = document.getElementById("chat-input").value.trim();
-    if (message === "") return;
-    addMessageToChat("You", message, "user-message");
+// before: function sendMessage() { ... }
+async function sendMessage() {
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (message === "") return;
 
-    fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/chat", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": sessionToken, // switch to `Bearer ${sessionToken}` if your backend changes
-        },
-        body: JSON.stringify({ message }),
-    })
-    .then(response => {
-        if (!response || !response.ok) {
-            throw new Error(`HTTP error! Status: ${response ? response.status : 'Unknown'}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        addMessageToChat("Bot", data.response, "bot-message");
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        addMessageToChat("Bot", "Sorry, there was an error. Please try again.", "bot-message");
+  // if somehow we don't have a token yet, create/restore the session now
+  if (!sessionToken) {
+    await loadSession();
+    if (!sessionToken) {
+      console.error("No session token after load; aborting send.");
+      return;
+    }
+  }
+
+  addMessageToChat("You", message, "user-message");
+
+  try {
+    const res = await fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": sessionToken, // or `Bearer ${sessionToken}` if you switch later
+      },
+      body: JSON.stringify({ message }),
     });
 
-    document.getElementById("chat-input").value = "";
-    scrollChatToBottom();
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    addMessageToChat("Bot", data.response, "bot-message");
+  } catch (err) {
+    console.error(err);
+    addMessageToChat("Bot", "Sorry, there was an error. Please try again.", "bot-message");
+  }
+
+  input.value = "";
+  scrollChatToBottom();
 }
+
 // Function to add a message to the chat, whether user or bot
 function addMessageToChat(sender, message, className) {
     const chatHistory = document.getElementById("chat-history");
@@ -205,32 +216,33 @@ document.getElementById("new-chat-btn").addEventListener("click", function () {
 */
 
 
+// before: window.onload = () => { ... }
 window.onload = async () => {
-    const newSession = await loadSession();
+  const newSession = await loadSession();
 
-    // If we truly started a brand-new session this page load, clear history
-    if (newSession) {
-        localStorage.removeItem("chatHistory");
-    }
+  // If we really just started a brand-new session, clear old history
+  if (newSession) {
+    localStorage.removeItem("chatHistory");
+  }
 
-    loadChatHistory();
-    showInitialMessage(); // now sessionStorage.initialMessage is guaranteed to exist (or fall back)
+  loadChatHistory();
+  showInitialMessage(); // safe now: initialMessage is in sessionStorage
 
-    // Event listeners
-    document.getElementById("send-btn").addEventListener("click", sendMessage);
-    document.getElementById("chat-input").addEventListener("keydown", function (e) {
-        if (e.key === "Enter") sendMessage();
-    });
+  // wire up events
+  document.getElementById("send-btn").addEventListener("click", sendMessage);
+  document.getElementById("chat-input").addEventListener("keydown", e => {
+    if (e.key === "Enter") sendMessage();
+  });
 
-    document.getElementById("open-sidebar-btn").addEventListener("click", function () {
-        const sidebar = document.getElementById("sidebar");
-        sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
-    });
+  document.getElementById("open-sidebar-btn").addEventListener("click", () => {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
+  });
 
-    document.getElementById("new-chat-btn").addEventListener("click", function () {
-        clearChat();
-        showInitialMessage();
-        document.getElementById("sidebar").style.width = "0";
-    });
+  document.getElementById("new-chat-btn").addEventListener("click", () => {
+    clearChat();
+    showInitialMessage();
+    document.getElementById("sidebar").style.width = "0";
+  });
 };
 
