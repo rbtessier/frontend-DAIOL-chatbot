@@ -1,3 +1,5 @@
+
+
 body, html {
     margin: 0;
     padding: 0;
@@ -26,18 +28,15 @@ body, html {
 }
 
 .chat-top-bar {
-    position: relative;
-    width: 100%;
-    height: 25px;
-    /*background-color: #710039; Dark color for contrast */
-    color: #ffffff;
-    /*display: flex;*/
-    text-align: center;
-    /*justify-content: center;*/
-    /*align-items: center;*/
-    font-size: 18px;
-    z-index: 1;
-    /*box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);*/
+  position: relative;           /* allows absolute-positioned icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;      /* center the title */
+}
+
+.chat-top-bar h2 {
+  margin: 0;
+  text-align: center;
 }
 
 /* Removed chat-header CSS */
@@ -78,22 +77,24 @@ body, html {
 
 
 /* Sidebar styling */
+/* --- Blade opens SMALL and from the LEFT --- */
 .sidebar {
-    height: 100%;
-    width: 0;
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: #eec96f;
-    overflow-x: hidden;
-    transition: width 0.3s;
-    padding-top: 60px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 10; /* Ensure it appears above other elements in chat container */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  width: 0;                     /* JS toggles to a small width */
+  position: absolute;
+  top: 0;
+  left: 0;                      /* was right: 0 */
+  right: auto;
+  background-color: #eec96f;    /* your yellow */
+  overflow-x: hidden;
+  transition: width 0.3s ease;
+  padding-top: 60px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 0 5px rgba(0,0,0,0.25);
 }
 
 .sidebar button {
@@ -111,16 +112,19 @@ body, html {
     color: #ffffff;
 }
 
-/* Sidebar toggle button */
+/* --- Move menu (hamburger) to the LEFT --- */
 .open-sidebar-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    z-index: 1; /* Keep it above sidebar for easy access */
+  position: absolute;
+  top: 10px;
+  left: 10px;                   /* was right: 10px */
+  right: auto;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #fff;                  /* match your maroon header */
+  font-size: 20px;
+  line-height: 1;
+  z-index: 20;                  /* above the blade */
 }
 
 .open-sidebar-btn:hover {
@@ -202,6 +206,19 @@ body, html {
     border-radius: 50%;  /* Keep it circular */
     border: 2px solid #ffffff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);  /* Adds a subtle shadow for a 3D effect */
+}
+
+#new-chat-btn {
+  background: #fff;
+  color: #7a0039;
+  border: 0;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+#new-chat-btn:hover {
+  opacity: .9;
 }
 
 #send-btn, #upload-btn {

@@ -223,6 +223,58 @@ document.getElementById("new-chat-btn").addEventListener("click", function () {
 });
 */
 
+// --- Sidebar controls (left, small, embed-friendly) ---
+const SIDEBAR_WIDTH = 200; // px — tweak as you like
+
+const sidebarEl = document.getElementById("sidebar");
+const openSidebarBtn = document.getElementById("open-sidebar-btn");
+const newChatBtn = document.getElementById("new-chat-btn");
+
+function openSidebar() {
+  if (!sidebarEl) return;
+  sidebarEl.style.width = `${SIDEBAR_WIDTH}px`;
+  openSidebarBtn?.setAttribute("aria-expanded", "true");
+}
+
+function closeSidebar() {
+  if (!sidebarEl) return;
+  sidebarEl.style.width = "0";
+  openSidebarBtn?.setAttribute("aria-expanded", "false");
+}
+
+function isSidebarOpen() {
+  if (!sidebarEl) return false;
+  return parseInt(getComputedStyle(sidebarEl).width, 10) > 0;
+}
+
+// Toggle on hamburger
+openSidebarBtn?.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent immediate outside-click close
+  isSidebarOpen() ? closeSidebar() : openSidebar();
+});
+
+// Esc to close
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && isSidebarOpen()) closeSidebar();
+});
+
+// Click outside to close
+document.addEventListener("click", (e) => {
+  if (!isSidebarOpen()) return;
+  const clickInsideSidebar = sidebarEl.contains(e.target);
+  const clickOnToggle = openSidebarBtn.contains(e.target);
+  if (!clickInsideSidebar && !clickOnToggle) closeSidebar();
+});
+
+// Close after starting a new chat
+newChatBtn?.addEventListener("click", () => {
+  // If you have your own clearChat/showInitialMessage functions, keep them:
+  try {
+    if (typeof clearChat === "function") clearChat();
+    if (typeof showInitialMessage === "function") showInitialMessage();
+  } catch (_) {}
+  closeSidebar();
+});
 
 // before: window.onload = () => { ... }
 window.onload = async () => {
