@@ -27,11 +27,23 @@ body, html {
     transition: all 0.3s ease;
 }
 
+/* Compact maroon header bar */
 .chat-top-bar {
-  position: relative;           /* allows absolute-positioned icon */
-  display: flex;
+  background: #710039;            /* maroon bar */
+  color: #fff;                    /* default text color inside the bar */
+  height: 56px;                   /* smaller bar */
+  display: grid;                  /* keeps title centered regardless of left icon */
+  grid-template-columns: 56px 1fr 56px; /* [left slot] [title] [right spacer] */
   align-items: center;
-  justify-content: center;      /* center the title */
+  border-radius: 8px 8px 0 0;
+  position: relative;
+}
+
+.chat-title {
+  margin: 0;
+  text-align: center;
+  color: #fff;                    /* white “McAllister” */
+  font-weight: 700;
 }
 
 .chat-top-bar h2 {
@@ -114,17 +126,13 @@ body, html {
 
 /* --- Move menu (hamburger) to the LEFT --- */
 .open-sidebar-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;                   /* was right: 10px */
-  right: auto;
+  justify-self: start;
+  margin-left: 10px;
   background: transparent;
   border: 0;
+  padding: 0;
   cursor: pointer;
-  color: #fff;                  /* match your maroon header */
-  font-size: 20px;
-  line-height: 1;
-  z-index: 20;                  /* above the blade */
+  z-index: 20;
 }
 
 .open-sidebar-btn:hover {
@@ -133,9 +141,11 @@ body, html {
 }
 
 .hamburger-icon {
-    width: 30px;
-    height: 30px;
-    z-index: 15;
+  width: 24px;               /* adjust as you like */
+  height: 24px;
+  display: block;
+  /* If your source icon is dark and you want it white, uncomment next line: */
+  /* filter: invert(1) brightness(2); */
 }
 
 @media (max-width: 600px) {
