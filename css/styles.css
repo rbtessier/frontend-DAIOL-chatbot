@@ -29,14 +29,15 @@ body, html {
 
 /* Compact maroon header bar */
 .chat-top-bar {
-  background: #710039;            /* maroon bar */
-  color: #fff;                    /* default text color inside the bar */
-  height: 56px;                   /* smaller bar */
-  display: grid;                  /* keeps title centered regardless of left icon */
-  grid-template-columns: 56px 1fr 56px; /* [left slot] [title] [right spacer] */
+  background: #710039;
+  color: #fff;
+  padding: 8px 0;              /* add vertical padding instead of fixed height */
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
   align-items: center;
   border-radius: 8px 8px 0 0;
   position: relative;
+  height: auto;                /* remove fixed 56px height */
 }
 
 .chat-title {
@@ -53,14 +54,14 @@ body, html {
 
 /* Removed chat-header CSS */
 .chat-history {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background-color: #eaeaea;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;  /* Add spacing between messages */
-    margin-top: 50px; /* Add margin to start below the top bar */
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #eaeaea;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 0;               /* remove extra gap under the top bar */
 }
 
 
