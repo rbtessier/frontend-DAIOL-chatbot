@@ -15,8 +15,12 @@ function getStartParamsFromURL() {
     return params;
 }
 
-// UPDATED: start a session by POSTing parameters to /api/start
 function startSession(params = {}) {
+    // Optimistically store so showInitialMessage can use it immediately
+    if (params.initialMessage) {
+        sessionStorage.setItem("initialMessage", params.initialMessage);
+    }
+
     return fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,26 +34,27 @@ function startSession(params = {}) {
         if (data.initialMessage) {
             sessionStorage.setItem("initialMessage", data.initialMessage);
         }
+        return true; // new session started
     })
-    .catch(error => console.error("Failed to start session:", error));
+    .catch(error => {
+        console.error("Failed to start session:", error);
+        return false;
+    });
 }
 
-function scrollChatToBottom() {
-    const chatHistory = document.getElementById("chat-history");
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-}
-
-function loadSession() {
-    // Check sessionStorage to determine if there's already a session for this page session
+async function loadSession() {
     sessionToken = sessionStorage.getItem("sessionToken");
     startParams = JSON.parse(sessionStorage.getItem("startParams") || "{}");
+
     if (!sessionToken) {
-        // No session exists, start a new one with URL params
         const paramsFromURL = getStartParamsFromURL();
         startParams = paramsFromURL;
-        startSession(paramsFromURL);
+        const started = await startSession(paramsFromURL);
+        return started; // true if we created a session now
     }
+    return false; // we already had a session
 }
+
 
 /* Old function replace
 function showInitialMessage() {
@@ -199,37 +204,32 @@ document.getElementById("new-chat-btn").addEventListener("click", function () {
 */
 
 
-window.onload = () => {
-    loadSession();
+window.onload = async () => {
+    const newSession = await loadSession();
 
-    // Check if a new session started. If so, clear chat history
-    if (!sessionStorage.getItem("sessionToken")) {
+    // If we truly started a brand-new session this page load, clear history
+    if (newSession) {
         localStorage.removeItem("chatHistory");
     }
 
     loadChatHistory();
-    showInitialMessage();
+    showInitialMessage(); // now sessionStorage.initialMessage is guaranteed to exist (or fall back)
 
-    // Add event listeners for chat interactions
+    // Event listeners
     document.getElementById("send-btn").addEventListener("click", sendMessage);
     document.getElementById("chat-input").addEventListener("keydown", function (e) {
         if (e.key === "Enter") sendMessage();
     });
-    //document.getElementById("new-chat-btn").addEventListener("click", clearChat);
 
-    // Sidebar toggle button listener
-    
     document.getElementById("open-sidebar-btn").addEventListener("click", function () {
-        console.log("Sidebar toggle clicked");  // Temporary log for testing
         const sidebar = document.getElementById("sidebar");
         sidebar.style.width = sidebar.style.width === "250px" ? "0" : "250px";
     });
-    
 
-    // New Chat button listener inside the sidebar
     document.getElementById("new-chat-btn").addEventListener("click", function () {
         clearChat();
-        showInitialMessage();  // Show the introductory message again
-        document.getElementById("sidebar").style.width = "0";  // Close the sidebar
+        showInitialMessage();
+        document.getElementById("sidebar").style.width = "0";
     });
 };
+
