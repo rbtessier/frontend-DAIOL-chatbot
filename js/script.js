@@ -71,11 +71,12 @@ function showInitialMessage() {
 */
 
 function showInitialMessage() {
-    // Show the initial message only if there is no existing chat history
     const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
     if (chatData.length === 0) {
-        const initialMessage = sessionStorage.getItem("initialMessage")
-            || "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
+        const initialMessage =
+            sessionStorage.getItem("initialMessage") ||
+            (startParams && startParams.initialMessage) ||
+            "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
         addMessageToChat("Bot", initialMessage, "bot-message");
     }
 }
