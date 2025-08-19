@@ -16,31 +16,32 @@ function getStartParamsFromURL() {
 }
 
 function startSession(params = {}) {
-    // Optimistically store so showInitialMessage can use it immediately
-    if (params.initialMessage) {
-        sessionStorage.setItem("initialMessage", params.initialMessage);
-    }
+  // make initialMessage available immediately
+  if (params.initialMessage) {
+    sessionStorage.setItem("initialMessage", params.initialMessage);
+  }
 
-    return fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params),
-    })
-    .then(response => response.json())
-    .then(data => {
-        sessionToken = data.token;
-        sessionStorage.setItem("sessionToken", sessionToken);
-        sessionStorage.setItem("startParams", JSON.stringify(params || {}));
-        if (data.initialMessage) {
-            sessionStorage.setItem("initialMessage", data.initialMessage);
-        }
-        return true; // new session started
-    })
-    .catch(error => {
-        console.error("Failed to start session:", error);
-        return false;
-    });
+  return fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/start", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  })
+  .then(r => r.json())
+  .then(data => {
+    sessionToken = data.token;
+    sessionStorage.setItem("sessionToken", sessionToken);
+    sessionStorage.setItem("startParams", JSON.stringify(params || {}));
+    if (data.initialMessage) {
+      sessionStorage.setItem("initialMessage", data.initialMessage);
+    }
+    return true; // new session started
+  })
+  .catch(e => {
+    console.error("Failed to start session:", e);
+    return false;
+  });
 }
+
 
 // before: function loadSession() { ... }
 async function loadSession() {
@@ -50,11 +51,12 @@ async function loadSession() {
   if (!sessionToken) {
     const paramsFromURL = getStartParamsFromURL();
     startParams = paramsFromURL;
-    await startSession(paramsFromURL);   // <-- wait for token + initialMessage
-    return true;                         // brand‑new session
+    const started = await startSession(paramsFromURL);
+    return started; // true if a new session was created now
   }
-  return false;                          // session already existed
+  return false; // an existing session was found
 }
+
 
 
 
@@ -73,15 +75,16 @@ function showInitialMessage() {
 */
 
 function showInitialMessage() {
-    const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
-    if (chatData.length === 0) {
-        const initialMessage =
-            sessionStorage.getItem("initialMessage") ||
-            (startParams && startParams.initialMessage) ||
-            "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
-        addMessageToChat("Bot", initialMessage, "bot-message");
-    }
+  const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  if (chatData.length === 0) {
+    const initialMessage =
+      sessionStorage.getItem("initialMessage") ||
+      (startParams && startParams.initialMessage) ||
+      "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
+    addMessageToChat("Bot", initialMessage, "bot-message");
+  }
 }
+
 
 
 // Helper function to create message elements (user or bot)
@@ -122,11 +125,10 @@ async function sendMessage() {
   const message = input.value.trim();
   if (message === "") return;
 
-  // if somehow we don't have a token yet, create/restore the session now
   if (!sessionToken) {
     await loadSession();
     if (!sessionToken) {
-      console.error("No session token after load; aborting send.");
+      console.error("No session token; cannot send.");
       return;
     }
   }
@@ -138,11 +140,10 @@ async function sendMessage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": sessionToken, // or `Bearer ${sessionToken}` if you switch later
+        "Authorization": sessionToken, // server accepts raw token or Bearer
       },
       body: JSON.stringify({ message }),
     });
-
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     addMessageToChat("Bot", data.response, "bot-message");
@@ -154,6 +155,7 @@ async function sendMessage() {
   input.value = "";
   scrollChatToBottom();
 }
+
 
 // Function to add a message to the chat, whether user or bot
 function addMessageToChat(sender, message, className) {
@@ -220,15 +222,15 @@ document.getElementById("new-chat-btn").addEventListener("click", function () {
 window.onload = async () => {
   const newSession = await loadSession();
 
-  // If we really just started a brand-new session, clear old history
   if (newSession) {
+    // only clear if we truly created a brand‑new token
     localStorage.removeItem("chatHistory");
   }
 
   loadChatHistory();
-  showInitialMessage(); // safe now: initialMessage is in sessionStorage
+  showInitialMessage(); // now initialMessage is guaranteed (or falls back)
 
-  // wire up events
+  // listeners
   document.getElementById("send-btn").addEventListener("click", sendMessage);
   document.getElementById("chat-input").addEventListener("keydown", e => {
     if (e.key === "Enter") sendMessage();
@@ -245,4 +247,5 @@ window.onload = async () => {
     document.getElementById("sidebar").style.width = "0";
   });
 };
+
 
