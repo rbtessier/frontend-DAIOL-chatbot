@@ -1,6 +1,16 @@
 let sessionToken = null;
 let startParams = null;
 
+// Configure marked.js for better rendering
+if (typeof marked !== 'undefined') {
+  marked.setOptions({
+    breaks: true,        // Convert \n to <br>
+    gfm: true,          // GitHub Flavored Markdown
+    headerIds: false,   // Don't add IDs to headers
+    mangle: false       // Don't escape autolinked email addresses
+  });
+}
+
 // NEW: read params from the page URL
 function getStartParamsFromURL() {
     const qs = new URLSearchParams(window.location.search);
@@ -87,6 +97,35 @@ function showInitialMessage() {
 
 
 
+// Helper function to enhance code blocks with copy buttons
+function enhanceCodeBlocks(container) {
+  const codeBlocks = container.querySelectorAll('pre code');
+  codeBlocks.forEach((block) => {
+    // Apply syntax highlighting
+    if (typeof hljs !== 'undefined') {
+      hljs.highlightElement(block);
+    }
+    
+    // Add copy button
+    const pre = block.parentElement;
+    if (!pre.querySelector('.copy-btn')) {
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.innerHTML = '📋 Copy';
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(block.textContent).then(() => {
+          copyBtn.innerHTML = '✓ Copied!';
+          setTimeout(() => {
+            copyBtn.innerHTML = '📋 Copy';
+          }, 2000);
+        });
+      };
+      pre.style.position = 'relative';
+      pre.appendChild(copyBtn);
+    }
+  });
+}
+
 // Helper function to create message elements (user or bot)
 function createMessageElement(message, className) {
     const messageContainer = document.createElement("div");
@@ -105,6 +144,9 @@ function createMessageElement(message, className) {
         messageElement.classList.add("chat-message", className);
         const formattedMessage = marked.parse(message);
         messageElement.innerHTML = formattedMessage;
+        
+        // Enhance code blocks with syntax highlighting and copy buttons
+        enhanceCodeBlocks(messageElement);
 
         // Append the icon and message to the container
         messageContainer.appendChild(iconElement);
