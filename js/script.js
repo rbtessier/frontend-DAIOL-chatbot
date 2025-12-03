@@ -124,6 +124,39 @@ function scrollChatToBottom() {
   if (el) el.scrollTop = el.scrollHeight;
 }
 
+// Typing indicator functions
+function showTypingIndicator() {
+  const chatHistory = document.getElementById("chat-history");
+  
+  // Create typing indicator container
+  const typingContainer = document.createElement("div");
+  typingContainer.classList.add("bot-message-container", "typing-indicator-container");
+  typingContainer.id = "typing-indicator";
+  
+  // Bot icon
+  const iconElement = document.createElement("img");
+  iconElement.src = "images/bot-icon.png";
+  iconElement.classList.add("bot-icon");
+  
+  // Typing message
+  const typingElement = document.createElement("div");
+  typingElement.classList.add("chat-message", "bot-message", "typing-indicator");
+  typingElement.innerHTML = "McAllister is typing<span class='typing-dots'><span>.</span><span>.</span><span>.</span></span>";
+  
+  typingContainer.appendChild(iconElement);
+  typingContainer.appendChild(typingElement);
+  chatHistory.appendChild(typingContainer);
+  
+  scrollChatToBottom();
+}
+
+function hideTypingIndicator() {
+  const indicator = document.getElementById("typing-indicator");
+  if (indicator) {
+    indicator.remove();
+  }
+}
+
 // before: function sendMessage() { ... }
 async function sendMessage() {
   const input = document.getElementById("chat-input");
@@ -139,7 +172,13 @@ async function sendMessage() {
     }
   }
 
+  // IMMEDIATE FEEDBACK: Clear input and add user message right away
   addMessageToChat("You", message, "user-message");
+  input.value = "";
+  scrollChatToBottom();
+
+  // SHOW TYPING INDICATOR
+  showTypingIndicator();
 
   try {
     const res = await fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/chat", {
@@ -152,13 +191,20 @@ async function sendMessage() {
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    
+    // HIDE TYPING INDICATOR
+    hideTypingIndicator();
+    
     addMessageToChat("Bot", data.response, "bot-message");
   } catch (err) {
     console.error(err);
+    
+    // HIDE TYPING INDICATOR on error too
+    hideTypingIndicator();
+    
     addMessageToChat("Bot", "Sorry, there was an error. Please try again.", "bot-message");
   }
 
-  input.value = "";
   scrollChatToBottom();
 }
 
