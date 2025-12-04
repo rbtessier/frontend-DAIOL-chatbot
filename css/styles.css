@@ -43,13 +43,51 @@ body, html {
 .chat-title {
   margin: 0;
   text-align: center;
-  color: #fff;                    /* white “McAllister” */
+  color: #fff;                    /* white "McAllister" */
   font-weight: 700;
 }
 
 .chat-top-bar h2 {
   margin: 0;
   text-align: center;
+}
+
+/* Font size controls */
+.font-size-controls {
+  display: flex;
+  gap: 4px;
+  justify-self: end;
+  margin-right: 8px;
+  align-items: center;
+}
+
+.font-control-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 28px;
+  height: 28px;
+}
+
+.font-control-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.font-control-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.font-control-btn:active:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: scale(0.95);
 }
 
 /* Removed chat-header CSS */
@@ -383,24 +421,50 @@ body, html {
   border-collapse: collapse;
   width: 100%;
   margin: 8px 0;
-  font-size: 0.9em;
+  font-size: 0.85em;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .bot-message th,
 .bot-message td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 6px;
   text-align: left;
+  word-wrap: break-word;
 }
 
 .bot-message th {
   background-color: #710039;
   color: white;
   font-weight: 600;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.bot-message td {
+  max-width: 150px;
 }
 
 .bot-message tr:nth-child(even) {
   background-color: rgba(113, 0, 57, 0.05);
+}
+
+/* Responsive tables for mobile */
+@media (max-width: 480px) {
+  .bot-message table {
+    font-size: 0.75em;
+  }
+  
+  .bot-message th,
+  .bot-message td {
+    padding: 4px;
+  }
+  
+  .bot-message td {
+    max-width: 80px;
+  }
 }
 
 /* Horizontal rules */

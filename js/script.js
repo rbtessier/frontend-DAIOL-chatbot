@@ -1,14 +1,56 @@
 let sessionToken = null;
 let startParams = null;
 
-// Configure marked.js for better rendering
-if (typeof marked !== 'undefined') {
-  marked.setOptions({
-    breaks: true,        // Convert \n to <br>
-    gfm: true,          // GitHub Flavored Markdown
-    headerIds: false,   // Don't add IDs to headers
-    mangle: false       // Don't escape autolinked email addresses
-  });
+// Font size management
+const DEFAULT_FONT_SIZE = 100; // percentage
+const MIN_FONT_SIZE = 80;
+const MAX_FONT_SIZE = 150;
+const FONT_SIZE_STEP = 10;
+
+function getFontSize() {
+  const stored = localStorage.getItem("chatFontSize");
+  return stored ? parseInt(stored, 10) : DEFAULT_FONT_SIZE;
+}
+
+function setFontSize(size) {
+  // Clamp between min and max
+  const clampedSize = Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, size));
+  localStorage.setItem("chatFontSize", clampedSize);
+  
+  // Apply to chat history
+  const chatHistory = document.getElementById("chat-history");
+  if (chatHistory) {
+    chatHistory.style.fontSize = clampedSize + "%";
+  }
+  
+  // Update button states
+  updateFontSizeButtons();
+}
+
+function updateFontSizeButtons() {
+  const currentSize = getFontSize();
+  const decreaseBtn = document.getElementById("decrease-font-btn");
+  const increaseBtn = document.getElementById("increase-font-btn");
+  const resetBtn = document.getElementById("reset-font-btn");
+  
+  if (decreaseBtn) {
+    decreaseBtn.disabled = currentSize <= MIN_FONT_SIZE;
+  }
+  if (increaseBtn) {
+    increaseBtn.disabled = currentSize >= MAX_FONT_SIZE;
+  }
+  if (resetBtn) {
+    resetBtn.style.opacity = currentSize === DEFAULT_FONT_SIZE ? "0.5" : "1";
+  }
+}
+
+function initializeFontSize() {
+  const size = getFontSize();
+  const chatHistory = document.getElementById("chat-history");
+  if (chatHistory) {
+    chatHistory.style.fontSize = size + "%";
+  }
+  updateFontSizeButtons();
 }
 
 // NEW: read params from the page URL
@@ -366,6 +408,9 @@ newChatBtn?.addEventListener("click", () => {
 
 // before: window.onload = () => { ... }
 window.onload = async () => {
+  // Initialize font size
+  initializeFontSize();
+  
   const newSession = await loadSession();
   if (newSession) localStorage.removeItem("chatHistory");
 
@@ -374,6 +419,21 @@ window.onload = async () => {
 
   document.getElementById("send-btn").addEventListener("click", sendMessage);
   document.getElementById("chat-input").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+  
+  // Font size control listeners
+  document.getElementById("decrease-font-btn")?.addEventListener("click", () => {
+    const currentSize = getFontSize();
+    setFontSize(currentSize - FONT_SIZE_STEP);
+  });
+  
+  document.getElementById("increase-font-btn")?.addEventListener("click", () => {
+    const currentSize = getFontSize();
+    setFontSize(currentSize + FONT_SIZE_STEP);
+  });
+  
+  document.getElementById("reset-font-btn")?.addEventListener("click", () => {
+    setFontSize(DEFAULT_FONT_SIZE);
+  });
 /*
   document.getElementById("open-sidebar-btn").addEventListener("click", () => {
     const sidebar = document.getElementById("sidebar");
