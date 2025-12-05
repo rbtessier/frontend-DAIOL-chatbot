@@ -134,9 +134,58 @@ function showInitialMessage() {
       (startParams && startParams.initialMessage) ||
       "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
     addMessageToChat("Bot", initialMessage, "bot-message");
+    showStarterPrompts();
+  } else {
+    // Show New Chat button when there's existing conversation
+    const newChatBtn = document.getElementById("new-chat-main-btn");
+    if (newChatBtn) newChatBtn.style.display = "block";
   }
 }
 
+// Show starter prompts for new users
+function showStarterPrompts() {
+  const chatHistory = document.getElementById("chat-history");
+  const starterPromptsContainer = document.createElement("div");
+  starterPromptsContainer.className = "starter-prompts";
+  starterPromptsContainer.id = "starter-prompts";
+  
+  const title = document.createElement("div");
+  title.className = "starter-prompts-title";
+  title.textContent = "Try asking me about:";
+  starterPromptsContainer.appendChild(title);
+  
+  const prompts = [
+    "What is organizational leadership?",
+    "How can AI improve business strategy?",
+    "Explain data-driven decision making",
+    "What are key leadership skills for the AI era?"
+  ];
+  
+  prompts.forEach(promptText => {
+    const promptBtn = document.createElement("button");
+    promptBtn.className = "starter-prompt-btn";
+    promptBtn.textContent = promptText;
+    promptBtn.onclick = () => {
+      document.getElementById("chat-input").value = promptText;
+      removeStarterPrompts();
+      sendMessage();
+    };
+    starterPromptsContainer.appendChild(promptBtn);
+  });
+  
+  chatHistory.appendChild(starterPromptsContainer);
+  scrollChatToBottom();
+}
+
+function removeStarterPrompts() {
+  const starterPrompts = document.getElementById("starter-prompts");
+  if (starterPrompts) {
+    starterPrompts.remove();
+  }
+  // Show New Chat button
+  const newChatBtn = document.getElementById("new-chat-main-btn");
+  if (newChatBtn) newChatBtn.style.display = "block";
+}
 
 
 // Helper function to enhance code blocks with copy buttons
@@ -246,6 +295,9 @@ async function sendMessage() {
   const input = document.getElementById("chat-input");
   const message = input.value.trim();
   if (message === "") return;
+  
+  // Remove starter prompts on first message
+  removeStarterPrompts();
 
   if (!sessionToken) {
     await loadSession();
@@ -419,6 +471,13 @@ window.onload = async () => {
 
   document.getElementById("send-btn").addEventListener("click", sendMessage);
   document.getElementById("chat-input").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+  
+  // New Chat button in main UI
+  document.getElementById("new-chat-main-btn")?.addEventListener("click", () => {
+    clearChat();
+    showInitialMessage();
+    document.getElementById("new-chat-main-btn").style.display = "none";
+  });
   
   // Font size control listeners
   document.getElementById("decrease-font-btn")?.addEventListener("click", () => {
