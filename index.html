@@ -18,16 +18,19 @@
     <div class="chat-container">
 
         <div class="chat-top-bar">
-            <button id="open-sidebar-btn"
-                class="open-sidebar-btn"
-                aria-expanded="false"
-                aria-controls="sidebar"
-                aria-label="Open menu">
-            <img src="images/hamburger.svg" alt="" class="hamburger-icon">
-            </button>
+            <div class="top-left">
+                <button id="new-chat-main-btn" class="top-action-btn" aria-label="Start a new chat" title="New Chat">New Chat</button>
+                <!-- Keeping the menu trigger for future blade reuse; hidden for now -->
+                <button id="open-sidebar-btn"
+                    class="open-sidebar-btn is-hidden"
+                    aria-expanded="false"
+                    aria-controls="sidebar"
+                    aria-label="Open menu">
+                <img src="images/hamburger.svg" alt="" class="hamburger-icon">
+                </button>
+            </div>
             <h2 class="chat-title">McAllister</h2>
             <div class="top-actions">
-                <button id="new-chat-main-btn" class="top-action-btn" aria-label="Start a new chat" title="New Chat">New Chat</button>
                 <div class="font-size-controls">
                 <button id="decrease-font-btn" class="font-control-btn" aria-label="Decrease font size" title="Smaller">A−</button>
                 <button id="reset-font-btn" class="font-control-btn" aria-label="Reset font size" title="Reset">A</button>

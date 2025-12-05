@@ -42,6 +42,13 @@ body, html {
   height: auto;                /* remove fixed 56px height */
 }
 
+.top-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
 .chat-title {
   margin: 0 auto;
   text-align: center;
@@ -212,6 +219,10 @@ body, html {
 .open-sidebar-btn:hover {
     background-color: rgba(142, 35, 89, 0.784); /* Light hover background */
     border-radius: 5px;
+}
+
+.is-hidden {
+  display: none;
 }
 
 .hamburger-icon {
