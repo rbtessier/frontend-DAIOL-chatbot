@@ -32,8 +32,10 @@ body, html {
   background: #710039;
   color: #fff;
   padding: 8px 0;              /* add vertical padding instead of fixed height */
-  display: grid;
-  grid-template-columns: 56px 1fr 56px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   align-items: center;
   border-radius: 8px 8px 0 0;
   position: relative;
@@ -41,10 +43,11 @@ body, html {
 }
 
 .chat-title {
-  margin: 0;
+  margin: 0 auto;
   text-align: center;
   color: #fff;                    /* white "McAllister" */
   font-weight: 700;
+  flex: 1;
 }
 
 .chat-top-bar h2 {
@@ -56,7 +59,6 @@ body, html {
 .font-size-controls {
   display: flex;
   gap: 4px;
-  justify-self: end;
   margin-right: 8px;
   align-items: center;
 }
@@ -104,9 +106,9 @@ body, html {
 
 
 .chat-message {
-    padding: 1px 10px;
-    margin-bottom: 0px;
-    border-radius: 10px;
+    padding: 8px 14px;
+    margin-bottom: 4px;
+    border-radius: 16px;
     max-width: 75%;
     word-wrap: break-word;
 }
@@ -115,6 +117,10 @@ body, html {
 .chat-input-container {
     display: flex;
     border-top: 1px solid #ccc;
+    background: #fff;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 2px 8px rgba(113,0,57,0.08);
+    margin-bottom: 8px;
 }
 
 #chat-input {
@@ -218,8 +224,8 @@ body, html {
     color: #ffffff;
     align-self: flex-end;
     text-align: right;
-    padding: -5px 8px;  /* Reduce padding on the bottom */
-    margin-bottom: 3px;  /* Slightly adjust bottom margin for spacing */
+    padding: 8px 14px;
+    margin-bottom: 4px;
     border-radius: 20px;
     max-width: 75%;
     display: inline-block;
@@ -231,8 +237,8 @@ body, html {
     color: #000000;
     align-self: flex-start;
     text-align: left;
-    padding: -5px 8px;
-    margin-bottom: 3px;
+    padding: 8px 14px;
+    margin-bottom: 4px;
     border-radius: 20px;
     max-width: 75%;
     display: inline-block;
@@ -353,15 +359,17 @@ body, html {
   position: absolute;
   top: 8px;
   right: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 12px;
+  background-color: #710039;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   z-index: 10;
+  box-shadow: 0 2px 8px rgba(113,0,57,0.08);
 }
 
 .copy-btn:hover {
