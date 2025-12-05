@@ -26,18 +26,18 @@
             <img src="images/hamburger.svg" alt="" class="hamburger-icon">
             </button>
             <h2 class="chat-title">McAllister</h2>
-            <div class="font-size-controls">
+            <div class="top-actions">
+                <button id="new-chat-main-btn" class="top-action-btn" aria-label="Start a new chat" title="New Chat">New Chat</button>
+                <div class="font-size-controls">
                 <button id="decrease-font-btn" class="font-control-btn" aria-label="Decrease font size" title="Smaller">A−</button>
                 <button id="reset-font-btn" class="font-control-btn" aria-label="Reset font size" title="Reset">A</button>
                 <button id="increase-font-btn" class="font-control-btn" aria-label="Increase font size" title="Larger">A+</button>
+                </div>
             </div>
         </div>
 
         <!--<div class="chat-header"><h2>Strategic Leadership Chatbot</h2></div>-->
         <div class="chat-history" id="chat-history"></div>
-        
-        <!-- New Chat button (shows in main UI) -->
-        <button id="new-chat-main-btn" class="new-chat-main-btn" style="display:none;">+ New Chat</button>
         
         <div class="chat-input-container">
             <input type="text" id="chat-input" placeholder="Type your message..." />

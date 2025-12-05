@@ -135,10 +135,6 @@ function showInitialMessage() {
       "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
     addMessageToChat("Bot", initialMessage, "bot-message");
     showStarterPrompts();
-  } else {
-    // Show New Chat button when there's existing conversation
-    const newChatBtn = document.getElementById("new-chat-main-btn");
-    if (newChatBtn) newChatBtn.style.display = "block";
   }
 }
 
@@ -182,9 +178,6 @@ function removeStarterPrompts() {
   if (starterPrompts) {
     starterPrompts.remove();
   }
-  // Show New Chat button
-  const newChatBtn = document.getElementById("new-chat-main-btn");
-  if (newChatBtn) newChatBtn.style.display = "block";
 }
 
 
@@ -476,7 +469,6 @@ window.onload = async () => {
   document.getElementById("new-chat-main-btn")?.addEventListener("click", () => {
     clearChat();
     showInitialMessage();
-    document.getElementById("new-chat-main-btn").style.display = "none";
   });
   
   // Font size control listeners
