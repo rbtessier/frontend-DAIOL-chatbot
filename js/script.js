@@ -132,9 +132,17 @@ function showInitialMessage() {
     const initialMessage =
       sessionStorage.getItem("initialMessage") ||
       (startParams && startParams.initialMessage) ||
-      "Hi, I’m McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
+      "Hi, I'm McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
     addMessageToChat("Bot", initialMessage, "bot-message");
-    showStarterPrompts();
+    
+    // Only show starter prompts if there's no custom initialMessage from parameters
+    const hasCustomInitialMessage = 
+      sessionStorage.getItem("initialMessage") || 
+      (startParams && startParams.initialMessage);
+    
+    if (!hasCustomInitialMessage) {
+      showStarterPrompts();
+    }
   }
 }
 
