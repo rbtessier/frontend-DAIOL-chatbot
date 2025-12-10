@@ -11,6 +11,25 @@ body, html {
     height: 100vh;
 }
 
+/* When embedded in an iframe, fill available space without centering */
+.embed-mode {
+  display: block;
+}
+.embed-mode, .embed-mode html {
+  height: 100vh;
+}
+.embed-mode .chat-container {
+  max-width: 100%;
+  width: 100%;
+  height: 100vh;
+  margin-top: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.embed-mode .chat-top-bar {
+  border-radius: 0;
+}
+
 .chat-container {
     margin-top: 0; /* Reset margin if previously adjusted */
     position: relative;
@@ -22,8 +41,8 @@ body, html {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: calc(80vh - 50px);
-    margin-top: 50px;
+  height: calc(80vh - 50px);
+  margin-top: 50px;
     transition: all 0.3s ease;
 }
 

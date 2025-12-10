@@ -1,5 +1,6 @@
 let sessionToken = null;
 let startParams = null;
+let storagePrefix = "chat"; // per-embed storage namespace
 
 // Font size management
 const DEFAULT_FONT_SIZE = 100; // percentage
@@ -8,14 +9,14 @@ const MAX_FONT_SIZE = 150;
 const FONT_SIZE_STEP = 10;
 
 function getFontSize() {
-  const stored = localStorage.getItem("chatFontSize");
+  const stored = localStorage.getItem(`${storagePrefix}:fontSize`);
   return stored ? parseInt(stored, 10) : DEFAULT_FONT_SIZE;
 }
 
 function setFontSize(size) {
   // Clamp between min and max
   const clampedSize = Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, size));
-  localStorage.setItem("chatFontSize", clampedSize);
+  localStorage.setItem(`${storagePrefix}:fontSize`, clampedSize);
   
   // Apply to chat history
   const chatHistory = document.getElementById("chat-history");
@@ -61,16 +62,34 @@ function getStartParamsFromURL() {
         cohortId: qs.get("cohortId") || undefined,
         systemPrompt: qs.get("systemPrompt") || undefined,
         initialMessage: qs.get("initialMessage") || undefined,
+        sessionId: qs.get("sessionId") || undefined,
+        embedId: qs.get("embedId") || undefined,
+        embed: qs.get("embed") || undefined,
     };
     // strip undefined to keep the POST body clean
     Object.keys(params).forEach(k => params[k] === undefined && delete params[k]);
     return params;
 }
 
+// Create a stable storage prefix for this embedded instance
+function computeStoragePrefix(params) {
+  // Prefer explicit identifiers
+  const id = params.sessionId || params.embedId || params.cohortId || params.userName;
+  if (id) return `chat:${String(id).slice(0,64)}`;
+  // Fallback: hash of prompt parameters + path
+  const basis = `${location.pathname}|${params.systemPrompt?.length || 0}|${params.initialMessage?.length || 0}`;
+  let h = 0;
+  for (let i = 0; i < basis.length; i++) {
+    h = ((h << 5) - h) + basis.charCodeAt(i);
+    h |= 0;
+  }
+  return `chat:auto-${Math.abs(h)}`;
+}
+
 function startSession(params = {}) {
   // make initialMessage available immediately
   if (params.initialMessage) {
-    sessionStorage.setItem("initialMessage", params.initialMessage);
+    sessionStorage.setItem(`${storagePrefix}:initialMessage`, params.initialMessage);
   }
 
   return fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/start", {
@@ -81,10 +100,10 @@ function startSession(params = {}) {
   .then(r => r.json())
   .then(data => {
     sessionToken = data.token;
-    sessionStorage.setItem("sessionToken", sessionToken);
-    sessionStorage.setItem("startParams", JSON.stringify(params || {}));
+    sessionStorage.setItem(`${storagePrefix}:sessionToken`, sessionToken);
+    sessionStorage.setItem(`${storagePrefix}:startParams`, JSON.stringify(params || {}));
     if (data.initialMessage) {
-      sessionStorage.setItem("initialMessage", data.initialMessage);
+      sessionStorage.setItem(`${storagePrefix}:initialMessage`, data.initialMessage);
     }
     return true; // new session started
   })
@@ -97,11 +116,20 @@ function startSession(params = {}) {
 
 // before: function loadSession() { ... }
 async function loadSession() {
-  sessionToken = sessionStorage.getItem("sessionToken");
-  startParams = JSON.parse(sessionStorage.getItem("startParams") || "{}");
+  // Read params first to establish storage namespace
+  const paramsFromURL = getStartParamsFromURL();
+  storagePrefix = computeStoragePrefix(paramsFromURL);
+
+  // Add embed-mode class for layout tweaks when embedded or embed=1
+  const isEmbedded = window.self !== window.top || paramsFromURL.embed === "1" || paramsFromURL.embed === "true";
+  if (isEmbedded) {
+    document.body.classList.add("embed-mode");
+  }
+
+  sessionToken = sessionStorage.getItem(`${storagePrefix}:sessionToken`);
+  startParams = JSON.parse(sessionStorage.getItem(`${storagePrefix}:startParams`) || "{}");
 
   if (!sessionToken) {
-    const paramsFromURL = getStartParamsFromURL();
     startParams = paramsFromURL;
     const started = await startSession(paramsFromURL);
     return started; // true if a new session was created now
@@ -127,17 +155,17 @@ function showInitialMessage() {
 */
 
 function showInitialMessage() {
-  const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  const chatData = JSON.parse(localStorage.getItem(`${storagePrefix}:chatHistory`)) || [];
   if (chatData.length === 0) {
     const initialMessage =
-      sessionStorage.getItem("initialMessage") ||
+      sessionStorage.getItem(`${storagePrefix}:initialMessage`) ||
       (startParams && startParams.initialMessage) ||
       "Hi, I'm McAllister, your copilot and guide through the Data Science, Applied AI and Organizational Leadership program at DeGroote.";
     addMessageToChat("Bot", initialMessage, "bot-message");
     
     // Only show starter prompts if there's no custom initialMessage from parameters
     const hasCustomInitialMessage = 
-      sessionStorage.getItem("initialMessage") || 
+      sessionStorage.getItem(`${storagePrefix}:initialMessage`) || 
       (startParams && startParams.initialMessage);
     
     if (!hasCustomInitialMessage) {
@@ -358,11 +386,11 @@ function addMessageToChat(sender, message, className) {
 }
 
 function clearChat() {
-    localStorage.removeItem("chatHistory");
+  localStorage.removeItem(`${storagePrefix}:chatHistory`);
     document.getElementById("chat-history").innerHTML = "";
 
     // Start a brand-new session with the same params (or URL params if none stored)
-    sessionStorage.removeItem("sessionToken");
+  sessionStorage.removeItem(`${storagePrefix}:sessionToken`);
     const params = (startParams && Object.keys(startParams).length)
         ? startParams
         : getStartParamsFromURL();
@@ -374,14 +402,14 @@ function clearChat() {
 
 // Save the message history without "Bot" or "You" labels
 function saveChatHistory(message, className) {
-    const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  const chatData = JSON.parse(localStorage.getItem(`${storagePrefix}:chatHistory`)) || [];
     chatData.push({ message, className });
-    localStorage.setItem("chatHistory", JSON.stringify(chatData));
+  localStorage.setItem(`${storagePrefix}:chatHistory`, JSON.stringify(chatData));
 }
 
 // Load the chat history from local storage
 function loadChatHistory() {
-    const chatData = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  const chatData = JSON.parse(localStorage.getItem(`${storagePrefix}:chatHistory`)) || [];
     chatData.forEach(chat => {
         const { message, className } = chat;
         const chatHistory = document.getElementById("chat-history");
@@ -465,7 +493,7 @@ window.onload = async () => {
   initializeFontSize();
   
   const newSession = await loadSession();
-  if (newSession) localStorage.removeItem("chatHistory");
+  if (newSession) localStorage.removeItem(`${storagePrefix}:chatHistory`);
 
   try { loadChatHistory(); } catch (e) { console.error("loadChatHistory failed:", e); }
   showInitialMessage();
