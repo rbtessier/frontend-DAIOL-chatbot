@@ -16,14 +16,17 @@ body, html {
   display: block;
 }
 .embed-mode, .embed-mode html {
-  height: 100vh;
+  /* Use dynamic viewport units to account for mobile browser UI chrome */
+  height: 100dvh;
 }
 .embed-mode .chat-container {
   width: 100%;
   max-width: 860px;           /* don’t fill entire page in embed */
   margin: 16px auto;          /* center and add breathing room */
-  height: calc(100vh - 32px); /* avoid excessive vertical stretch */
-  max-height: 900px;          /* clamp so zooming out doesn’t make it huge */
+  /* Use small viewport height as fallback, dynamic viewport on modern browsers */
+  height: calc(100svh - 32px);
+  height: calc(100dvh - 32px);
+  max-height: 100dvh;         /* ensure it never exceeds the viewport */
   border-radius: 8px;         /* keep the nice card look */
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
@@ -158,6 +161,23 @@ body, html {
   flex-direction: column;
   gap: 10px;
   margin-top: 0;               /* remove extra gap under the top bar */
+}
+/* Ensure the input area stays visible and content scrolls above it */
+.chat-input-container {
+  flex-shrink: 0;
+}
+
+/* Account for safe area on iOS notch devices */
+.embed-mode .chat-container {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mobile refinement: use 100svh to avoid URL bar affecting height */
+@media (max-width: 600px) {
+  .embed-mode .chat-container {
+    height: calc(100svh - 16px);
+    margin: 8px auto;
+  }
 }
 
 /* Prevent horizontal overflow on extreme zoom levels */
