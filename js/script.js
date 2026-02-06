@@ -92,7 +92,7 @@ function startSession(params = {}) {
     sessionStorage.setItem(`${storagePrefix}:initialMessage`, params.initialMessage);
   }
 
-  return fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/start", {
+  return fetch("https://dsaiol-chatbot-backend-fsb8fng3cvffhhcq.canadacentral-01.azurewebsites.net/api/start", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
@@ -346,7 +346,7 @@ async function sendMessage() {
   showTypingIndicator();
 
   try {
-    const res = await fetch("https://daiol-chatbot-c7c6bhf0cghgdtdj.canadacentral-01.azurewebsites.net/api/chat", {
+    const res = await fetch("https://dsaiol-chatbot-backend-fsb8fng3cvffhhcq.canadacentral-01.azurewebsites.net/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
