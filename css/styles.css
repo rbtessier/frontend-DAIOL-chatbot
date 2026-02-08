@@ -206,12 +206,17 @@ body, html {
 }
 
 #chat-input {
-    flex: 1;
-    padding: 15px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    border-radius: 0;
+  flex: 1;
+  padding: 12px 15px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 0;
+  resize: none;
+  min-height: 48px;
+  max-height: 140px;
+  line-height: 1.4;
+  overflow-y: auto;
 }
 
 

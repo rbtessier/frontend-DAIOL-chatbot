@@ -249,6 +249,7 @@ function enhanceCodeBlocks(container) {
 // Helper function to create message elements (user or bot)
 function createMessageElement(message, className) {
     const messageContainer = document.createElement("div");
+  const safeMessage = (typeof message === "string") ? message : String(message ?? "");
 
     if (className === "bot-message") {
         // Create a container to hold the icon and message
@@ -262,7 +263,7 @@ function createMessageElement(message, className) {
         // Create the message element
         const messageElement = document.createElement("div");
         messageElement.classList.add("chat-message", className);
-        const formattedMessage = marked.parse(message);
+        const formattedMessage = marked.parse(safeMessage);
         messageElement.innerHTML = formattedMessage;
         
         // Enhance code blocks with syntax highlighting and copy buttons
@@ -274,7 +275,7 @@ function createMessageElement(message, className) {
     } else {
         // Create a standard user message
         messageContainer.classList.add("chat-message", className);
-        const formattedMessage = marked.parse(message);
+        const formattedMessage = marked.parse(safeMessage);
         messageContainer.innerHTML = formattedMessage;
     }
 
@@ -360,7 +361,13 @@ async function sendMessage() {
     // HIDE TYPING INDICATOR
     hideTypingIndicator();
     
-    addMessageToChat("Bot", data.response, "bot-message");
+    let responseText = (data && typeof data.response === "string") ? data.response : "";
+    if (!responseText || !responseText.trim()) {
+      const errorText = (data && typeof data.error === "string") ? data.error : "";
+      responseText = errorText || "I didn't receive a response. Please try again.";
+      console.warn("Empty or missing response from /api/chat:", data);
+    }
+    addMessageToChat("Bot", responseText, "bot-message");
   } catch (err) {
     console.error(err);
     
@@ -377,12 +384,16 @@ async function sendMessage() {
 // Function to add a message to the chat, whether user or bot
 function addMessageToChat(sender, message, className) {
     const chatHistory = document.getElementById("chat-history");
-    const messageContainer = createMessageElement(message, className);
+    let safeMessage = message;
+    if (typeof safeMessage !== "string" || !safeMessage.trim()) {
+      safeMessage = "[No response]";
+    }
+    const messageContainer = createMessageElement(safeMessage, className);
     chatHistory.appendChild(messageContainer);
     scrollChatToBottom();
 
     // Save message to local storage
-    saveChatHistory(message, className);
+    saveChatHistory(safeMessage, className);
 }
 
 function clearChat() {
@@ -499,7 +510,12 @@ window.onload = async () => {
   showInitialMessage();
 
   document.getElementById("send-btn").addEventListener("click", sendMessage);
-  document.getElementById("chat-input").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+  document.getElementById("chat-input").addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
   
   // New Chat button in main UI
   document.getElementById("new-chat-main-btn")?.addEventListener("click", () => {
